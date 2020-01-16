@@ -39,34 +39,31 @@ const articlesList = [{
 
 
 $(function () {
-   createSidebar();
-   createArticleItems();
-   $('.sidebar-item-container').click((e) => {
-    console.log('Sidebar item clicked');
-    $('.sidebar-item-container').removeClass('sidebar-item-container-active');
-    $(e.currentTarget).addClass('sidebar-item-container-active');
-   });
+    createSidebar();
+    createArticleItems();
+    $('.sidebar-item-container').click((e) => {
+        console.log('Sidebar item clicked');
+        $('.sidebar-item-container').removeClass('sidebar-item-container-active');
+        $(e.currentTarget).addClass('sidebar-item-container-active');
+    });
 
-   $('.article-item').click((e) => {
-    console.log('Article Item clicked');
-    $('.article-item').removeClass('article-item-active');
-    $(e.currentTarget).addClass('article-item-active');
-   });
+    $('.article-item').click((e) => {
+        console.log('Article Item clicked');
+        $('.article-item').removeClass('article-item-active');
+        $(e.currentTarget).addClass('article-item-active');
+    });
 
-   $('.message-box').keypress((e) => {
-    if (e.which === 13) {
-      const txt = $(".message-box").val();
-      if (!txt || txt.trim().length === 0) {
-          return;
-      }
-      $('.result').html('Request in progress..');
-      // Ideally, a POST Call is to be made. Since I do not have the APIs, I went ahead with a GET Call
-      $.get( "https://support.oneskyapp.com/hc/en-us/article_attachments/202761627/example_1.json", function( data ) {
-        $('.result').html('Response:' + JSON.stringify(data));
-      });
-      e.preventDefault();
-    }
-  });
+    $('.message-box').keypress((e) => {
+        if (e.which !== 13) {
+            return;
+        }
+        invokeService();
+        e.preventDefault();
+    });
+    $('.submit-button').click((e) => {
+        invokeService();
+    });
+
 });
 
 function createSidebar() {
@@ -90,14 +87,17 @@ function createArticleItems() {
     $('.articles-list').append(articleItems);
 }
 
-function sidebarItem_clickHandler() {
-
-}
-
-function articleList_itemClickHandler() {
-
-}
-
-function btnMessage_clickHandler() {
+function invokeService(e) {
+    const txt = $(".message-box").val();
+    if (!txt || txt.trim().length === 0) {
+        return;
+    }
+    $('.result').html('Request in progress..');
+    setTimeout(() => {
+        // Ideally, a POST Call is to be made. Since I do not have the APIs, I went ahead with a GET Call
+        $.get("https://support.oneskyapp.com/hc/en-us/article_attachments/202761627/example_1.json", function (data) {
+            $('.result').html('Response:' + JSON.stringify(data));
+        });
+    }, 1000);
 
 }
